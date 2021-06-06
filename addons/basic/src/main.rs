@@ -1,6 +1,5 @@
 use log::*;
 use model::*;
-use tide::prelude::*;
 use tide::Request;
 
 #[async_std::main]

@@ -1,8 +1,29 @@
 = Bibby
 
-
 An extensible IRC bot framework that relies on inter-process communication
 rather than plugins.
+
+The idea is that commands are dispatched to configurable HTTP addon services
+which do all the heavy lifting. This would allow shared services to be deployed
+servicing multiple bot instances. Basically the "bot" part of bibby is a simple
+dispatch loop, all the "smarts" are in the addon services.
+
+[source]
+----
+  +----------+   POST /api/v0/time     +-----------------+
+  |   bot    |------------------------>|   basic addon   |
+  +----------+                         +-----------------+
+           |
+           |    POST /api/v0/fact      +----------------+
+           `-------------------------->|   fact addon   |
+                                       +----------------+
+                                                 |
+                                               +----+
+                                               | db |
+                                               +----+
+----
+
+
 
 
 .POST /api/v0/command/time
@@ -27,33 +48,3 @@ rather than plugins.
 
 ----
 
-
-[source]
-----
-                         HTTP localhost:6066          +---------------------+
-                                                      |                     |
-                        +---------------------------->|                     |
-                        |                             |  factserv           |
-                        |                             |                     |
-                        |                             +---------------------+
-                        |
-                        |
-                        |                             +-----------------------+
-                        |   GETlocalhost:6067         |                       |
-+-----------------------+---------------------------->|    fortuneserv        |
-|                       |                             |                       |
-|                       |                             +-----------------------+
-|                       |
-|      Driver           |
-|                       |                               +----------------+
-|                       |                               |                |
-|                       |                               |                |
-+-----------------------+                               |                |
-                        |                               |                |
-                        +------------------------------>|   weatherserv  |
-                                                        |                |
-                                                        |                |
-                                                        |                |
-                                                        +----------------+
-
-----
