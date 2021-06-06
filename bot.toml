@@ -1,0 +1,10 @@
+owners = []
+nickname = "bibbybot"
+alt_nicks = ["bibby_", "bibbybot__"]
+username = "bibby"
+realname = "Bibby"
+server = "irc.libera.chat"
+port = 6697
+use_tls = true
+cert_path = "libera.der"
+channels = ["#bibby"]

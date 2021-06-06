@@ -1,0 +1,13 @@
+[package]
+name = "bot"
+version = "0.1.0"
+authors = ["R. Tyler Croy <rtyler@brokenco.de>"]
+edition = "2018"
+
+[dependencies]
+async-std = { version = "1", features = ["attributes", "tokio1"]}
+irc = "*"
+pretty_env_logger = "0.4"
+serde = "1"
+serde_json = "1"
+surf = "*"
