@@ -6,6 +6,8 @@ edition = "2018"
 
 [dependencies]
 async-std = { version = "1", features = ["attributes"] }
+chrono = "*"
+log = "*"
 model = { path = "../../model" }
 pretty_env_logger = "*"
 serde = { version = "1", features = ["derive"] }
