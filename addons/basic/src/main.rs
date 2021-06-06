@@ -1,7 +1,7 @@
 use log::*;
 use model::*;
-use tide::Request;
 use tide::prelude::*;
+use tide::Request;
 
 #[async_std::main]
 async fn main() -> tide::Result<()> {
@@ -41,12 +41,10 @@ async fn cmd_time(mut req: Request<()>) -> tide::Result {
     if let Some(arguments) = &command.arguments {
         if arguments == "UTC" {
             Ok(Utc::now().to_rfc2822().into())
-        }
-        else {
+        } else {
             Ok(format!("I don't know how to handle: {}", arguments).into())
         }
     } else {
         Ok(Local::now().to_rfc2822().into())
     }
-
 }

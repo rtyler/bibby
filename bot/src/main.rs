@@ -1,6 +1,6 @@
+use async_std::stream::StreamExt;
 use irc::client::prelude::*;
 use log::*;
-use async_std::stream::StreamExt;
 
 use model::*;
 
@@ -21,10 +21,11 @@ async fn main() -> Result<(), irc::error::Error> {
             debug!("Received: {:?}", message);
             if let Some(captured) = regex.captures(text) {
                 if let Some(action) = captured.name("action") {
-
                     let server = match config.get_option(&format!("command_{}", &action.as_str())) {
                         Some(server) => server,
-                        None => config.get_option("command_fallback").unwrap_or("http://example.com"),
+                        None => config
+                            .get_option("command_fallback")
+                            .unwrap_or("http://example.com"),
                     };
 
                     let arguments = match captured.name("arguments") {
@@ -35,7 +36,7 @@ async fn main() -> Result<(), irc::error::Error> {
                             } else {
                                 Some(arguments.to_string())
                             }
-                        },
+                        }
 
                         None => None,
                     };
@@ -64,7 +65,10 @@ async fn main() -> Result<(), irc::error::Error> {
 
                     let url = format!("{}/api/v0/{}", server, action.as_str());
 
-                    if let Ok(mut res) = surf::post(url).body(surf::Body::from_json(&data).unwrap()).await {
+                    if let Ok(mut res) = surf::post(url)
+                        .body(surf::Body::from_json(&data).unwrap())
+                        .await
+                    {
                         let m = res.body_string().await.unwrap();
                         client.send_privmsg(&channel, m).unwrap();
                     }

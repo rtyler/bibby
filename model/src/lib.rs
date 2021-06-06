@@ -1,5 +1,3 @@
-
-
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -11,12 +9,10 @@ pub struct Command {
     pub server: Server,
 }
 
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Bot {
     pub nickname: String,
 }
-
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Caller {
@@ -25,12 +21,11 @@ pub struct Caller {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct Server  {
+pub struct Server {
     pub hostname: String,
     pub port: u64,
     pub tls: bool,
 }
 
 #[cfg(test)]
-mod tests {
-}
+mod tests {}
