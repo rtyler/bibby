@@ -22,6 +22,11 @@ async fn main() -> Result<(), irc::error::Error> {
             if let Some(captured) = regex.captures(text) {
                 if let Some(action) = captured.name("action") {
 
+                    let server = match config.get_option(&format!("command_{}", &action.as_str())) {
+                        Some(server) => server,
+                        None => config.get_option("command_fallback").unwrap_or("http://example.com"),
+                    };
+
                     let arguments = match captured.name("arguments") {
                         Some(arguments) => {
                             let arguments = arguments.as_str();
@@ -35,6 +40,11 @@ async fn main() -> Result<(), irc::error::Error> {
                         None => None,
                     };
 
+                    let caller = match &message.prefix {
+                        Some(Prefix::Nickname(nickname, _username, _hostname)) => nickname,
+                        _ => "unknown",
+                    };
+
                     let data = model::Command {
                         arguments,
                         channel: channel.clone(),
@@ -42,7 +52,7 @@ async fn main() -> Result<(), irc::error::Error> {
                             nickname: client.current_nickname().to_string(),
                         },
                         caller: Caller {
-                            nickname: "blah".to_string(),
+                            nickname: caller.to_string(),
                             mode: "".to_string(),
                         },
                         server: Server {
@@ -51,11 +61,13 @@ async fn main() -> Result<(), irc::error::Error> {
                             tls: true,
                         },
                     };
-                    let mut res = surf::post(format!("http://localhost:8041/api/v0/{}", action.as_str()))
-                        .body(surf::Body::from_json(&data).unwrap()).await.unwrap();
-                    assert_eq!(res.status(), 200);
-                    let m = res.body_string().await.unwrap();
-                    client.send_privmsg(&channel, m).unwrap();
+
+                    let url = format!("{}/api/v0/{}", server, action.as_str());
+
+                    if let Ok(mut res) = surf::post(url).body(surf::Body::from_json(&data).unwrap()).await {
+                        let m = res.body_string().await.unwrap();
+                        client.send_privmsg(&channel, m).unwrap();
+                    }
                 }
             }
         }

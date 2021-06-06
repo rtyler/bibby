@@ -11,4 +11,8 @@ channels = ["#bibby"]
 
 
 [options]
+# !fact add <foo>, !fact delete <foo>, !fact help
+command_fact = "http://localhost:8042"
+command_what = "http://localhost:8042"
+
 command_fallback = "http://localhost:8041"
