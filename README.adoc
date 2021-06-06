@@ -5,6 +5,29 @@ An extensible IRC bot framework that relies on inter-process communication
 rather than plugins.
 
 
+.POST /api/v0/command/time
+[source,json]
+----
+{
+    "arguments" : "",
+    "channel" : "#bibby",
+    "bot" : {
+        "nickname" : "bibbybot"
+    },
+    "caller" : {
+        "nickname" : "rtyler",
+        "mode" : "+o"
+    },
+    "server" : {
+        "hostname" : "irc.libera.chat",
+        "port" : 6697,
+        "tls" : true
+    }
+}
+
+----
+
+
 [source]
 ----
                          HTTP localhost:6066          +---------------------+

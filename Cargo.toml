@@ -2,4 +2,7 @@
 
 members = [
     "bot",
+    "model",
+
+    "addons/basic",
 ]
